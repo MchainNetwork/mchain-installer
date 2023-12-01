@@ -147,7 +147,7 @@ TESTNET = Network(
     ],
     rpc_node = "https://testnet.rpc.mchain.network",
     addrbook_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/addrbook.json",
-    snapshot_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/snapshots/latest"
+    snapshot_url = "https://mchain.fra1.cdn.digitaloceanspaces.com/snapshots/mchain-testnet-1.tar"
 )
 
 MAINNET = Network(
