@@ -143,33 +143,33 @@ TESTNET = Network(
         },
     },
     peers = [
-    
+      "fd7bc01a0445c48c928eb3f17867d7a56c7353e9@64.227.74.95:26656",
     ],
-    rpc_node = "https://testnet.rpc.mchain.network:443",
-    addrbook_url = "https://testnet.rpc.mchain.network/addrbook",
-    snapshot_url = "https://snapshots.testnet.mchain.network/latest"
+    rpc_node = "https://testnet.rpc.mchain.network",
+    addrbook_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/addrbook.json",
+    snapshot_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/snapshots/latest"
 )
 
 MAINNET = Network(
-    chain_id = "mchain-testnet-1",
-    version = "v0.1.0-testnet",
-    genesis_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/genesis.json",
+    chain_id = "mchain-1",
+    version = "v0.1.0",
+    genesis_url = "",
     binary_url = {
         "linux": {
-            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-amd64",
-            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-arm64"
+            "amd64": "",
+            "arm64": ""
         },
         "darwin": {
-            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-amd64",
-            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-arm64"
+            "amd64": "",
+            "arm64": ""
         },
     },
     peers = [
     
     ],
-    rpc_node = "https://testnet.rpc.mchain.network:443",
-    addrbook_url = "https://testnet.rpc.mchain.network/addrbook",
-    snapshot_url = "https://snapshots.testnet.mchain.network/latest"
+    rpc_node = "",
+    addrbook_url = "",
+    snapshot_url = ""
 )
 
 COSMOVISOR_URL = {
