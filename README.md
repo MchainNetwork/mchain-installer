@@ -1,38 +1,38 @@
-# Osmosis Installer 🧪 ⚙️
+# Mchain Installer 🧪 ⚙️
 
 <p align="center">
   <img src="assets/screenshot.png" alt="Screenshot" width="700">
 </p>
 
-The Osmosis Installer is a simple tool that provides an easy and streamlined way to install and configure Osmosis.
+The Mchain Installer is a simple tool that provides an easy and streamlined way to install and configure Mchain.
 
 ## ✨ Features
 
-The Osmosis Installer offers the following key features:
+The Mchain Installer offers the following key features:
 
-- 🔧 **Dependency Installation**: Automatically installs the necessary dependencies for running Osmosis.
+- 🔧 **Dependency Installation**: Automatically installs the necessary dependencies for running Mchain.
 
 - 🌐 **Network Joining**: Allows you to choose between joining the testnet or mainnet.
 
-- ⬇️ **Binary Download**: Downloads the Osmosis binary for the selected network.
+- ⬇️ **Binary Download**: Downloads the Mchain binary for the selected network.
 
-- ⚙️ **Configuration Customization**: Provides options for customizing your Osmosis configuration.
+- ⚙️ **Configuration Customization**: Provides options for customizing your Mchain configuration.
 
-- 🔌 **Background Service Setup**: Sets up either cosmovisor or osmosisd as background services for continuous operation.
+- 🔌 **Background Service Setup**: Sets up either cosmovisor or mchaind as background services for continuous operation.
 
 ##  Installation
 
-To install Osmosisd, follow these steps:
+To install mchaind, follow these steps:
 
 1. Open your terminal.
 
 2. Run the following command:
 
 ```bash
-source <(curl -sL https://get.osmosis.zone/run)
+source <(curl -sL https://get.mchain.network/run)
 ```
 
-This command will download and execute the Osmosis Installer script.
+This command will download and execute the Mchain Installer script.
 
 Follow the on-screen instructions to complete the installation. The installer will guide you through the installation process, allowing you to make choices such as selecting the installation type (node or client) and customizing various settings.
 
@@ -44,7 +44,7 @@ Follow the on-screen instructions to complete the installation. The installer wi
 #### Adding Swap
 
 Adding Swap Space
-For optimal performance, it is recommended to have at least 64GB of RAM when running an Osmosis node. If your system does not meet this requirement, setting up swap space can help ensure smooth operation and prevent out-of-memory (OOM) errors.
+For optimal performance, it is recommended to have at least 64GB of RAM when running an Mchain node. If your system does not meet this requirement, setting up swap space can help ensure smooth operation and prevent out-of-memory (OOM) errors.
 
 To add swap space to your system, follow these steps:
 

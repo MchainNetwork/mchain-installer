@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        network: [osmosis-1, osmo-test-5]
+        network: [mchain-1, mchain-testnet-1]
       fail-fast: false
 
     steps:
@@ -38,10 +38,10 @@ jobs:
           python i.py \
             --install client \
             --network ${{ matrix.network }} \
-            --home ${{ runner.temp }}/.osmosisd \
-            --moniker osmosis \
+            --home ${{ runner.temp }}/.mchaind \
+            --moniker mchain \
             --overwrite 
       -
-        name: Run osmosisd
+        name: Run mchaind
         run: |
-          osmosisd status --home ${{ runner.temp }}/.osmosisd
+          mchaind status --home ${{ runner.temp }}/.mchaind

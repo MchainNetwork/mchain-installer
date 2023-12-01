@@ -11,27 +11,27 @@ import json
 import tempfile
 from enum import Enum
 
-DEFAULT_OSMOSIS_HOME = os.path.expanduser("~/.osmosisd")
-DEFAULT_MONIKER = "osmosis"
+DEFAULT_MCHAIN_HOME = os.path.expanduser("~/.mchaind")
+DEFAULT_MONIKER = "mchain"
 
-NETWORK_CHOICES = ['osmosis-1', 'osmo-test-5']
-INSTALL_CHOICES = ['node', 'client', 'localosmosis']
+NETWORK_CHOICES = ['mchain-1', 'mchain-testnet-1']
+INSTALL_CHOICES = ['node', 'client', 'localmchain']
 PRUNING_CHOICES = ['default', 'nothing', 'everything']
 
 # CLI arguments
-parser = argparse.ArgumentParser(description="Osmosis Installer")
+parser = argparse.ArgumentParser(description="Mchain Installer")
 
 parser.add_argument(
     "--home",
     type=str,
-    help=f"Osmosis installation location",
+    help=f"Mchain installation location",
 )
 
 parser.add_argument(
     '-m',
     "--moniker",
     type=str,
-    help="Moniker name for the node (Default: 'osmosis')",
+    help="Moniker name for the node (Default: 'mchain')",
 )
 
 parser.add_argument(
@@ -46,7 +46,7 @@ parser.add_argument(
     '-o',
     '--overwrite',
     action='store_true',
-    help="Overwrite existing Osmosis home without prompt",
+    help="Overwrite existing Mchain home without prompt",
     dest="overwrite"
 )
 
@@ -101,7 +101,7 @@ args = parser.parse_args()
 class InstallChoice(str, Enum):
     NODE = "1"
     CLIENT = "2"
-    LOCALOSMOSIS = "3"
+    LOCALMCHAIN = "3"
 
 class NetworkChoice(str, Enum):
     MAINNET = "1"
@@ -129,59 +129,39 @@ class Network:
         self.snapshot_url = snapshot_url
 
 TESTNET = Network(
-    chain_id = "osmo-test-5",
-    version = "v20.1.0-testnet",
-    genesis_url = "https://osmosis.fra1.digitaloceanspaces.com/osmo-test-5/genesis.json",
+    chain_id = "mchain-testnet-1",
+    version = "v0.1.0-testnet",
+    genesis_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/genesis.json",
     binary_url = {
         "linux": {
-            "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.1.0-testnet/osmosisd-20.1.0-testnet-linux-amd64",
-            "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.1.0-testnet/osmosisd-20.1.0-testnet-linux-arm64"
+            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-amd64",
+            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-arm64"
         },
         "darwin": {
-            "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.1.0-testnet/osmosisd-20.1.0-testnet-darwin-amd64",
-            "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.1.0-testnet/osmosisd-20.1.0-testnet-darwin-arm64"
+            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-amd64",
+            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-arm64"
         },
     },
     peers = [
-        "a5f81c035ff4f985d5e7c940c7c3b846389b7374@167.235.115.14:26656",
-        "05c41cc1fc7c8cb379e54d784bcd3b3907a1568e@157.245.26.231:26656",
-        "7c2b9e76be5c2142c76b429d9c29e902599ceb44@157.245.21.183:26656",
-        "f440c4980357d8b56db87ddd50f06bd551f1319a@5.78.98.19:26656",
-        "ade4d8bc,8cbe014af6ebdf3cb7b1e9ad36f412c0@testnet-seeds.polkachu.com:12556",
+    
     ],
-    rpc_node = "https://rpc.testnet.osmosis.zone:443",
-    addrbook_url = "https://rpc.testnet.osmosis.zone/addrbook",
-    snapshot_url = "https://snapshots.testnet.osmosis.zone/latest"
+    rpc_node = "https://testnet.rpc.mchain.network:443",
+    addrbook_url = "https://testnet.rpc.mchain.network/addrbook",
+    snapshot_url = "https://snapshots.testnet.mchain.network/latest"
 )
 
 MAINNET = Network(
-    chain_id = "osmosis-1",
-    version = "v20.2.1",
-    genesis_url = "https://osmosis.fra1.digitaloceanspaces.com/osmosis-1/genesis.json",
-    binary_url = {
-        "linux": {
-            "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.2.1/osmosisd-20.2.1-linux-amd64",
-            "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.2.1/osmosisd-20.2.1-linux-arm64"
-        },
-        "darwin": {
-            "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.2.1/osmosisd-20.2.1-darwin-amd64",
-            "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/v20.2.1/osmosisd-20.2.1-darwin-arm64"
-        },
-    },
-    peers = None,
-    rpc_node = "https://rpc.osmosis.zone:443",
-    addrbook_url = "https://rpc.osmosis.zone/addrbook",
-    snapshot_url = "https://snapshots.osmosis.zone/latest"
+    chain_id = "mchain-1",
 )
 
 COSMOVISOR_URL = {
     "darwin": {
-        "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-darwin-amd64",
-        "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-darwin-arm64"
+        "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-darwin-amd64",
+        "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-darwin-arm64"
     },
     "linux": {
-        "amd64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-linux-amd64",
-        "arm64": "https://osmosis.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-linux-arm64"
+        "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-linux-amd64",
+        "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/cosmovisor/cosmovisor-v1.2.0-linux-arm64"
     }
 }
 # Terminal utils
@@ -199,36 +179,37 @@ def clear_screen():
 
 def welcome_message():
     print(bcolors.OKGREEN + """
- ██████╗ ███████╗███╗   ███╗ ██████╗ ███████╗██╗███████╗
-██╔═══██╗██╔════╝████╗ ████║██╔═══██╗██╔════╝██║██╔════╝
-██║   ██║███████╗██╔████╔██║██║   ██║███████╗██║███████╗
-██║   ██║╚════██║██║╚██╔╝██║██║   ██║╚════██║██║╚════██║
-╚██████╔╝███████║██║ ╚═╝ ██║╚██████╔╝███████║██║███████║
-╚═════╝ ╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝╚══════╝
-
-Welcome to the Osmosis node installer!
+███╗   ███╗ ██████╗██╗  ██╗ █████╗ ██╗███╗   ██╗
+████╗ ████║██╔════╝██║  ██║██╔══██╗██║████╗  ██║
+██╔████╔██║██║     ███████║███████║██║██╔██╗ ██║
+██║╚██╔╝██║██║     ██╔══██║██╔══██║██║██║╚██╗██║
+██║ ╚═╝ ██║╚██████╗██║  ██║██║  ██║██║██║ ╚████║
+╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
 
 
-For more information, please visit https://docs.osmosis.zone
+Welcome to the Mchain node installer!
 
-If you have an old Osmosis installation, 
+
+For more information, please visit https://docs.mchain.network
+
+If you have an old Mchain installation, 
 - backup any important data before proceeding
-- ensure that no osmosis services are running in the background
+- ensure that no mchain services are running in the background
 """ + bcolors.ENDC)
 
 
-def client_complete_message(osmosis_home):
+def client_complete_message(mchain_home):
     print(bcolors.OKGREEN + """
-✨ Congratulations! You have successfully completed setting up an Osmosis client! ✨
+✨ Congratulations! You have successfully completed setting up an Mchain client! ✨
 """ + bcolors.ENDC)
 
-    print("🧪 Try running: " + bcolors.OKGREEN + f"osmosisd status --home {osmosis_home}" + bcolors.ENDC)
+    print("🧪 Try running: " + bcolors.OKGREEN + f"mchaind status --home {mchain_home}" + bcolors.ENDC)
     print()
 
 
-def node_complete_message(using_cosmovisor, using_service, osmosis_home):
+def node_complete_message(using_cosmovisor, using_service, mchain_home):
     print(bcolors.OKGREEN + """
-✨ Congratulations! You have successfully completed setting up an Osmosis node! ✨
+✨ Congratulations! You have successfully completed setting up an Mchain node! ✨
 """ + bcolors.ENDC)
     
     if using_service:
@@ -237,16 +218,16 @@ def node_complete_message(using_cosmovisor, using_service, osmosis_home):
             print("🧪 To start the cosmovisor service run: ")
             print(bcolors.OKGREEN + f"sudo systemctl start cosmovisor" + bcolors.ENDC)
         else:
-            print("🧪 To start the osmosisd service run: ")
-            print(bcolors.OKGREEN + f"sudo systemctl start osmosisd" + bcolors.ENDC)
+            print("🧪 To start the mchaind service run: ")
+            print(bcolors.OKGREEN + f"sudo systemctl start mchaind" + bcolors.ENDC)
 
     else:
         if using_cosmovisor:
             print("🧪 To start cosmovisor run: ")
-            print(bcolors.OKGREEN + f"DAEMON_NAME=osmosisd DAEMON_HOME={osmosis_home} cosmovisor run start" + bcolors.ENDC)
+            print(bcolors.OKGREEN + f"DAEMON_NAME=mchaind DAEMON_HOME={mchain_home} cosmovisor run start" + bcolors.ENDC)
         else:
-            print("🧪 To start osmosisd run: ")
-            print(bcolors.OKGREEN + f"osmosisd start --home {osmosis_home}" + bcolors.ENDC)
+            print("🧪 To start mchaind run: ")
+            print(bcolors.OKGREEN + f"mchaind start --home {mchain_home}" + bcolors.ENDC)
 
 
     
@@ -262,8 +243,8 @@ def select_install():
             choice = InstallChoice.NODE
         elif args.install == "client":
             choice = InstallChoice.CLIENT
-        elif args.install ==  "localosmosis":
-            choice = InstallChoice.LOCALOSMOSIS
+        elif args.install ==  "localmchain":
+            choice = InstallChoice.LOCALMCHAIN
         else:
             print(bcolors.RED + f"Invalid setup {args.install}. Please choose a valid setup.\n" + bcolors.ENDC)
             sys.exit(1)
@@ -273,9 +254,9 @@ def select_install():
         print(bcolors.OKGREEN + """
 Please choose the desired installation:
 
-    1) node         - run an osmosis node and join mainnet or testnet
-    2) client       - setup osmosisd to query a public node
-    3) localosmosis - setup a local osmosis development node
+    1) node         - run an mchain node and join mainnet or testnet
+    2) client       - setup mchaind to query a public node
+    3) localmchain - setup a local mchain development node
 
 💡 You can select the installation using the --install flag.
         """ + bcolors.ENDC)
@@ -287,7 +268,7 @@ Please choose the desired installation:
                 print("Exiting the program...")
                 sys.exit(0)
 
-            if choice not in [InstallChoice.NODE, InstallChoice.CLIENT, InstallChoice.LOCALOSMOSIS]:
+            if choice not in [InstallChoice.NODE, InstallChoice.CLIENT, InstallChoice.LOCALMCHAIN]:
                 print("Invalid input. Please choose a valid option.")
             else:
                 break
@@ -314,7 +295,9 @@ def select_network():
     # Check if network is specified in args
     if args.network:
         if args.network == MAINNET.chain_id:
-            choice = NetworkChoice.MAINNET
+            #choice = NetworkChoice.MAINNET
+            print(bcolors.RED + f"The {args.network} network is not yet available. Please choose testnet network." + bcolors.ENDC)
+            sys.exit(1)
         elif args.network == TESTNET.chain_id:
             choice = NetworkChoice.TESTNET
         else:
@@ -341,6 +324,8 @@ Please choose the desired network:
 
             if choice not in [NetworkChoice.MAINNET, NetworkChoice.TESTNET]:
                 print(bcolors.RED + "Invalid input. Please choose a valid option. Accepted values: [ 1 , 2 ] \n" + bcolors.ENDC)
+            if choice == NetworkChoice.MAINNET:
+                print(bcolors.RED + f"The mainnet network is not yet available. Please choose testnet network." + bcolors.ENDC)
             else:
                 break
         
@@ -352,22 +337,22 @@ Please choose the desired network:
     return choice
 
 
-def select_osmosis_home():
+def select_mchain_home():
     """
-    Selects the path for running the 'osmosisd init --home <SELECTED_HOME>' command.
+    Selects the path for running the 'mchaind init --home <SELECTED_HOME>' command.
 
     Returns:
-        osmosis_home (str): The selected path.
+        mchain_home (str): The selected path.
 
     """
     if args.home:
-        osmosis_home = args.home
+        mchain_home = args.home
     else:
-        default_home = os.path.expanduser("~/.osmosisd")
+        default_home = os.path.expanduser("~/.mchaind")
         print(bcolors.OKGREEN + f"""
-Do you want to install Osmosis in the default location?:
+Do you want to install Mchain in the default location?:
 
-    1) Yes, use default location {DEFAULT_OSMOSIS_HOME} (recommended)
+    1) Yes, use default location {DEFAULT_MCHAIN_HOME} (recommended)
     2) No, specify custom location
 
 💡 You can specify the home using the --home flag.
@@ -381,14 +366,14 @@ Do you want to install Osmosis in the default location?:
                 sys.exit(0)
 
             if choice == Answer.YES:
-                osmosis_home = default_home
+                mchain_home = default_home
                 break
 
             elif choice == Answer.NO:
                 while True:
-                    custom_home = input("Enter the path for Osmosis home: ").strip()
+                    custom_home = input("Enter the path for Mchain home: ").strip()
                     if custom_home != "":
-                        osmosis_home = custom_home
+                        mchain_home = custom_home
                         break
                     else:
                         print("Invalid path. Please enter a valid directory.")
@@ -397,12 +382,12 @@ Do you want to install Osmosis in the default location?:
                 print("Invalid choice. Please enter 1 or 2.")
 
     clear_screen()
-    return osmosis_home
+    return mchain_home
 
 
 def select_moniker():
     """
-    Selects the moniker for the Osmosis node.
+    Selects the moniker for the Mchain node.
 
     Returns:
         moniker (str): The selected moniker.
@@ -446,20 +431,20 @@ Do you want to use the default moniker?
     return moniker
 
 
-def initialize_osmosis_home(osmosis_home, moniker):
+def initialize_mchain_home(mchain_home, moniker):
     """
-    Initializes the Osmosis home directory with the specified moniker.
+    Initializes the Mchain home directory with the specified moniker.
 
     Args:
-        osmosis_home (str): The chosen home directory.
-        moniker (str): The moniker for the Osmosis node.
+        mchain_home (str): The chosen home directory.
+        moniker (str): The moniker for the Mchain node.
 
     """
     if not args.overwrite:
 
         while True:
             print(bcolors.OKGREEN + f"""
-Do you want to initialize the Osmosis home directory at '{osmosis_home}'?
+Do you want to initialize the Mchain home directory at '{mchain_home}'?
             """ + bcolors.ENDC, end="")
 
             print(bcolors.RED + f"""
@@ -470,7 +455,7 @@ Do you want to initialize the Osmosis home directory at '{osmosis_home}'?
     1) Yes, proceed with initialization
     2) No, quit
 
-💡 You can overwrite the osmosis home using --overwrite flag.
+💡 You can overwrite the mchain home using --overwrite flag.
             """ + bcolors.ENDC)
             
             choice = input("Enter your choice, or 'exit' to quit: ").strip()
@@ -488,14 +473,14 @@ Do you want to initialize the Osmosis home directory at '{osmosis_home}'?
             else:
                 print("Invalid choice. Please enter 1 or 2.")
     
-    print(f"Initializing Osmosis home directory at '{osmosis_home}'...")
+    print(f"Initializing Mchain home directory at '{mchain_home}'...")
     try:
         subprocess.run(
-            ["rm", "-rf", osmosis_home], 
+            ["rm", "-rf", mchain_home], 
             stderr=subprocess.DEVNULL, check=True)
         
         subprocess.run(
-            ["osmosisd", "init", moniker,  "-o", "--home", osmosis_home], 
+            ["mchaind", "init", moniker,  "-o", "--home", mchain_home], 
             stderr=subprocess.DEVNULL, check=True)
 
         print("Initialization completed successfully.")
@@ -509,7 +494,7 @@ Do you want to initialize the Osmosis home directory at '{osmosis_home}'?
     clear_screen()
 
 
-def select_pruning(osmosis_home):
+def select_pruning(mchain_home):
     """
     Allows the user to choose pruning settings and performs actions based on the selected option.
 
@@ -555,7 +540,7 @@ Please choose your desired pruning settings:
             clear_screen()
             print(f"Chosen setting: {PRUNING_CHOICES[int(choice) - 1]}")
     
-    app_toml = os.path.join(osmosis_home, "config", "app.toml")
+    app_toml = os.path.join(mchain_home, "config", "app.toml")
 
     if choice == PruningChoice.DEFAULT:
         # Nothing to do
@@ -611,7 +596,7 @@ def customize_config(home, network):
         peers = ','.join(TESTNET.peers)
         subprocess.run(["sed -i -E 's/persistent_peers = \"\"/persistent_peers = \"" + peers + "\"/g' " + config_toml], shell=True)
     
-    # osmosis-1 configuration
+    # mchain-1 configuration
     elif network == NetworkChoice.MAINNET:
         client_toml = os.path.join(home, "config", "client.toml")
 
@@ -669,26 +654,26 @@ def download_binary(network):
         sys.exit(0)
 
     try:   
-        binary_path = os.path.join(args.binary_path, "osmosisd")
+        binary_path = os.path.join(args.binary_path, "mchaind")
 
-        print("Downloading " + bcolors.PURPLE+ "osmosisd" + bcolors.ENDC, end="\n\n")
+        print("Downloading " + bcolors.PURPLE+ "mchaind" + bcolors.ENDC, end="\n\n")
         print("from " + bcolors.OKGREEN + f"{binary_url}" + bcolors.ENDC, end=" ")
         print("to " + bcolors.OKGREEN + f"{binary_path}" + bcolors.ENDC)
         print()
         print(bcolors.OKGREEN + "💡 You can change the path using --binary_path" + bcolors.ENDC)
 
-        subprocess.run(["wget", binary_url,"-q", "-O", "/tmp/osmosisd"], check=True)
-        os.chmod("/tmp/osmosisd", 0o755)
+        subprocess.run(["wget", binary_url,"-q", "-O", "/tmp/mchaind"], check=True)
+        os.chmod("/tmp/mchaind", 0o755)
 
         if platform.system() == "Linux":
-            subprocess.run(["sudo", "mv", "/tmp/osmosisd", binary_path], check=True)
+            subprocess.run(["sudo", "mv", "/tmp/mchaind", binary_path], check=True)
             subprocess.run(["sudo", "chown", f"{os.environ['USER']}:{os.environ['USER']}", binary_path], check=True)
             subprocess.run(["sudo", "chmod", "+x", binary_path], check=True)
         else:
-            subprocess.run(["mv", "/tmp/osmosisd", binary_path], check=True)
+            subprocess.run(["mv", "/tmp/mchaind", binary_path], check=True)
 
         # Test binary 
-        subprocess.run(["osmosisd", "version"], check=True)
+        subprocess.run(["mchaind", "version"], check=True)
 
         print("Binary downloaded successfully.")
 
@@ -700,13 +685,13 @@ def download_binary(network):
     clear_screen()
 
 
-def download_genesis(network, osmosis_home):
+def download_genesis(network, mchain_home):
     """
     Downloads the genesis file for the specified network.
 
     Args:
         network (NetworkChoice): The network type, either MAINNET or TESTNET.
-        osmosis_home (str): The path to the Osmosis home directory.
+        mchain_home (str): The path to the Mchain home directory.
 
     Raises:
         SystemExit: If the genesis download URL is not available for the current network.
@@ -720,7 +705,7 @@ def download_genesis(network, osmosis_home):
     if genesis_url:
         try:
             print("Downloading " + bcolors.PURPLE + "genesis.json" + bcolors.ENDC + f" from {genesis_url}")
-            genesis_path = os.path.join(osmosis_home, "config", "genesis.json")
+            genesis_path = os.path.join(mchain_home, "config", "genesis.json")
 
             subprocess.run(["wget", genesis_url, "-q", "-O", genesis_path], check=True)
             print("Genesis downloaded successfully.\n")
@@ -730,13 +715,13 @@ def download_genesis(network, osmosis_home):
             sys.exit(1)
 
 
-def download_addrbook(network, osmosis_home):
+def download_addrbook(network, mchain_home):
     """
     Downloads the addrbook for the specified network.
 
     Args:
         network (NetworkChoice): The network type, either MAINNET or TESTNET.
-        osmosis_home (str): The path to the Osmosis home directory.
+        mchain_home (str): The path to the Mchain home directory.
 
     Raises:
         SystemExit: If the genesis download URL is not available for the current network.
@@ -750,7 +735,7 @@ def download_addrbook(network, osmosis_home):
     if addrbook_url:
         try:
             print("Downloading " + bcolors.PURPLE + "addrbook.json" + bcolors.ENDC + f" from {addrbook_url}")
-            addrbook_path = os.path.join(osmosis_home, "config", "addrbook.json")
+            addrbook_path = os.path.join(mchain_home, "config", "addrbook.json")
 
             subprocess.run(["wget", addrbook_url, "-q", "-O", addrbook_path], check=True)
             print("Addrbook downloaded successfully.")
@@ -762,13 +747,13 @@ def download_addrbook(network, osmosis_home):
     clear_screen()
 
 
-def download_snapshot(network, osmosis_home):
+def download_snapshot(network, mchain_home):
     """
     Downloads the snapshot for the specified network.
 
     Args:
         network (NetworkChoice): The network type, either MAINNET or TESTNET.
-        osmosis_home (str): The path to the Osmosis home directory.
+        mchain_home (str): The path to the Mchain home directory.
 
     Raises:
         SystemExit: If the genesis download URL is not available for the current network.
@@ -780,7 +765,7 @@ def download_snapshot(network, osmosis_home):
         Installs the prerequisites: Homebrew (brew) package manager and lz4 compression library.
 
         Args:
-            osmosis_home (str): The path of the Osmosis home directory.
+            mchain_home (str): The path of the Mchain home directory.
 
         """
         while True:
@@ -827,8 +812,8 @@ Do you want me to install it?
     def parse_snapshot_info(network):
         """
         Creates a dictionary containing the snapshot information for the specified network.
-        It merges the snapshot information from the osmosis official snapshot JSON and 
-        quicksync from chianlayer https://dl2.quicksync.io/json/osmosis.json
+        It merges the snapshot information from the mchain official snapshot JSON and 
+        quicksync from chianlayer https://dl2.quicksync.io/json/mchain.json
 
         Returns:
             dict: Dictionary containing the parsed snapshot information.
@@ -839,11 +824,11 @@ Do you want me to install it?
         if network == NetworkChoice.TESTNET:
             snapshot_url = TESTNET.snapshot_url
             chain_id = TESTNET.chain_id
-            quicksync_prefix = "osmotestnet-5"
+            quicksync_prefix = "mchain-testnet-1"
         elif network == NetworkChoice.MAINNET:
             snapshot_url = MAINNET.snapshot_url
             chain_id = MAINNET.chain_id
-            quicksync_prefix = "osmosis-1"
+            quicksync_prefix = "mchain-1"
         else:
             print(f"Invalid network choice - {network}")
             sys.exit(1)
@@ -862,12 +847,12 @@ Do you want me to install it?
             "mirror": "Germany",
             "url": latest_snapshot_url.rstrip('\n'),
             "type": "pruned",
-            "provider": "osmosis"
+            "provider": "mchain"
         })
 
         # Parse quicksync snapshot json
         try:
-            url = "https://dl2.quicksync.io/json/osmosis.json"
+            url = "https://dl2.quicksync.io/json/mchain.json"
             resp = urlrq.urlopen(url, context=context)
             data = resp.read().decode()
 
@@ -944,7 +929,7 @@ Choose one of the following snapshots:
         print(f"\n🔽 Downloading snapshots from {snapshot_url}")
         download_process = subprocess.Popen(["wget", "-q", "-O", "-", snapshot_url], stdout=subprocess.PIPE)
         lz4_process = subprocess.Popen(["lz4", "-d"], stdin=download_process.stdout, stdout=subprocess.PIPE)
-        tar_process = subprocess.Popen(["tar", "-C", osmosis_home, "-xf", "-"], stdin=lz4_process.stdout, stdout=subprocess.PIPE)
+        tar_process = subprocess.Popen(["tar", "-C", mchain_home, "-xf", "-"], stdin=lz4_process.stdout, stdout=subprocess.PIPE)
 
         tar_process.wait()
         print("Snapshot download and extraction completed successfully.")
@@ -957,7 +942,7 @@ Choose one of the following snapshots:
     clear_screen()
 
 
-def download_cosmovisor(osmosis_home):
+def download_cosmovisor(mchain_home):
     """
     Downloads and installs cosmovisor.
 
@@ -1049,12 +1034,12 @@ Do you want to install cosmovisor?
 
     # Set environment variables
     env = {
-        "DAEMON_NAME": "osmosisd",
-        "DAEMON_HOME": osmosis_home
+        "DAEMON_NAME": "mchaind",
+        "DAEMON_HOME": mchain_home
     }
 
     try:
-        subprocess.run(["/usr/local/bin/cosmovisor", "init", "/usr/local/bin/osmosisd"], check=True, env=env)
+        subprocess.run(["/usr/local/bin/cosmovisor", "init", "/usr/local/bin/mchaind"], check=True, env=env)
     except subprocess.CalledProcessError:
         print("Failed to initialize cosmovisor.")
         sys.exit(1)
@@ -1063,7 +1048,7 @@ Do you want to install cosmovisor?
     return True
 
 
-def setup_cosmovisor_service(osmosis_home):
+def setup_cosmovisor_service(mchain_home):
     """
     Setup cosmovisor service on Linux.
     """
@@ -1102,14 +1087,14 @@ Description=Cosmovisor daemon
 After=network-online.target
 
 [Service]
-Environment="DAEMON_NAME=osmosisd"
-Environment="DAEMON_HOME={osmosis_home}"
+Environment="DAEMON_NAME=mchaind"
+Environment="DAEMON_HOME={mchain_home}"
 Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
 Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
 Environment="DAEMON_LOG_BUFFER_SIZE=512"
 Environment="UNSAFE_SKIP_BACKUP=true"
 User={user}
-ExecStart=/usr/local/bin/cosmovisor start --home {osmosis_home}
+ExecStart=/usr/local/bin/cosmovisor start --home {mchain_home}
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
@@ -1132,9 +1117,9 @@ WantedBy=multi-user.target
     return True
 
 
-def setup_osmosisd_service(osmosis_home):
+def setup_mchaind_service(mchain_home):
     """
-    Setup osmosisd service on Linux.
+    Setup mchaind service on Linux.
     """
 
     operating_system = platform.system()
@@ -1144,9 +1129,9 @@ def setup_osmosisd_service(osmosis_home):
 
     if not args.service:
         print(bcolors.OKGREEN + """
-Do you want to set up osmosisd as a background service?
+Do you want to set up mchaind as a background service?
 
-    1) Yes, set up osmosisd as a service
+    1) Yes, set up mchaind as a service
     2) No
 
 💡 You can specify the service setup using the --service flag.
@@ -1167,12 +1152,12 @@ Do you want to set up osmosisd as a background service?
     user = os.environ.get("USER")
     
     unit_file_contents = f"""[Unit]
-Description=Osmosis Daemon
+Description=Mchain Daemon
 After=network-online.target
 
 [Service]
 User={user}
-ExecStart=/usr/local/bin/osmosisd start --home {osmosis_home}
+ExecStart=/usr/local/bin/mchaind start --home {mchain_home}
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
@@ -1182,12 +1167,12 @@ LimitNPROC=infinity
 WantedBy=multi-user.target
 """
 
-    unit_file_path = "/lib/systemd/system/osmosisd.service"
+    unit_file_path = "/lib/systemd/system/mchaind.service"
 
-    with open("osmosisd.service", "w") as f:
+    with open("mchaind.service", "w") as f:
         f.write(unit_file_contents)
 
-    subprocess.run(["sudo", "mv", "osmosisd.service", unit_file_path])
+    subprocess.run(["sudo", "mv", "mchaind.service", unit_file_path])
     subprocess.run(["sudo", "systemctl", "daemon-reload"])
     subprocess.run(["systemctl", "restart", "systemd-journald"])
 
@@ -1205,31 +1190,31 @@ def main():
     if chosen_install == InstallChoice.NODE:
         network = select_network()
         download_binary(network)
-        osmosis_home = select_osmosis_home()
+        mchain_home = select_mchain_home()
         moniker = select_moniker()
-        initialize_osmosis_home(osmosis_home, moniker)
-        using_cosmovisor = download_cosmovisor(osmosis_home)
-        download_genesis(network, osmosis_home)
-        download_addrbook(network, osmosis_home)
-        select_pruning(osmosis_home)
-        download_snapshot(network, osmosis_home)
+        initialize_mchain_home(mchain_home, moniker)
+        using_cosmovisor = download_cosmovisor(mchain_home)
+        download_genesis(network, mchain_home)
+        download_addrbook(network, mchain_home)
+        select_pruning(mchain_home)
+        download_snapshot(network, mchain_home)
         if using_cosmovisor:
-            using_service = setup_cosmovisor_service(osmosis_home)
+            using_service = setup_cosmovisor_service(mchain_home)
         else:
-            using_service = setup_osmosisd_service(osmosis_home)
-        node_complete_message(using_cosmovisor, using_service, osmosis_home)
+            using_service = setup_mchaind_service(mchain_home)
+        node_complete_message(using_cosmovisor, using_service, mchain_home)
 
     elif chosen_install == InstallChoice.CLIENT:
         network = select_network()
         download_binary(network)
-        osmosis_home = select_osmosis_home()
+        mchain_home = select_mchain_home()
         moniker = select_moniker()
-        initialize_osmosis_home(osmosis_home, moniker)
-        customize_config(osmosis_home, network)
-        client_complete_message(osmosis_home)
+        initialize_mchain_home(mchain_home, moniker)
+        customize_config(mchain_home, network)
+        client_complete_message(mchain_home)
 
-    elif chosen_install == InstallChoice.LOCALOSMOSIS:
-        print("Setting up a LocalOsmosis node not yet supported.")
+    elif chosen_install == InstallChoice.LOCALMCHAIN:
+        print("Setting up a LocalMchain node not yet supported.")
         sys.exit(1)
 
 main()
