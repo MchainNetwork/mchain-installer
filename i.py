@@ -151,7 +151,25 @@ TESTNET = Network(
 )
 
 MAINNET = Network(
-    chain_id = "mchain-1",
+    chain_id = "mchain-testnet-1",
+    version = "v0.1.0-testnet",
+    genesis_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/genesis.json",
+    binary_url = {
+        "linux": {
+            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-amd64",
+            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-linux-arm64"
+        },
+        "darwin": {
+            "amd64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-amd64",
+            "arm64": "https://mchain.fra1.digitaloceanspaces.com/binaries/v0.1.0-testnet/mchaind-0.1.0-testnet-darwin-arm64"
+        },
+    },
+    peers = [
+    
+    ],
+    rpc_node = "https://testnet.rpc.mchain.network:443",
+    addrbook_url = "https://testnet.rpc.mchain.network/addrbook",
+    snapshot_url = "https://snapshots.testnet.mchain.network/latest"
 )
 
 COSMOVISOR_URL = {
