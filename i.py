@@ -143,7 +143,7 @@ TESTNET = Network(
         },
     },
     peers = [
-      "fd7bc01a0445c48c928eb3f17867d7a56c7353e9@64.227.74.95:26656",
+      "422a7573d2e727a51cdca65dc0bd909e62f0b05f@64.227.74.95:26656",
     ],
     rpc_node = "https://testnet.rpc.mchain.network",
     addrbook_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/addrbook.json",
@@ -493,12 +493,14 @@ Do you want to initialize the Mchain home directory at '{mchain_home}'?
     
     print(f"Initializing Mchain home directory at '{mchain_home}'...")
     try:
+        daemon_binary_path = os.path.join(mchain_home, "mchaind")
+
         subprocess.run(
             ["rm", "-rf", mchain_home], 
             stderr=subprocess.DEVNULL, check=True)
         
         subprocess.run(
-            ["mchaind", "init", moniker,  "-o", "--home", mchain_home], 
+            [daemon_binary_path, "init", moniker,  "-o", "--home", mchain_home], 
             stderr=subprocess.DEVNULL, check=True)
 
         print("Initialization completed successfully.")
@@ -1014,11 +1016,12 @@ Do you want to install cosmovisor?
         sys.exit(0)
 
     try:   
-        binary_path = os.path.join(args.binary_path, "cosmovisor")
+        cosmovisor_binary_path = os.path.join(args.binary_path, "cosmovisor")
+        daemon_binary_path = os.path.join(args.binary_path, "mchaind")
 
         print("Downloading " + bcolors.PURPLE+ "cosmovisor" + bcolors.ENDC, end="\n\n")
         print("from " + bcolors.OKGREEN + f"{binary_url}" + bcolors.ENDC, end=" ")
-        print("to " + bcolors.OKGREEN + f"{binary_path}" + bcolors.ENDC)
+        print("to " + bcolors.OKGREEN + f"{cosmovisor_binary_path}" + bcolors.ENDC)
         print()
         print(bcolors.OKGREEN + "💡 You can change the path using --binary_path" + bcolors.ENDC)
 
@@ -1030,14 +1033,14 @@ Do you want to install cosmovisor?
         os.chmod(temp_binary_path, 0o755)
 
         if platform.system() == "Linux":
-            subprocess.run(["sudo", "mv", temp_binary_path, binary_path], check=True)
-            subprocess.run(["sudo", "chown", f"{os.environ['USER']}:{os.environ['USER']}", binary_path], check=True)
-            subprocess.run(["sudo", "chmod", "+x", binary_path], check=True)
+            subprocess.run(["sudo", "mv", temp_binary_path, cosmovisor_binary_path], check=True)
+            subprocess.run(["sudo", "chown", f"{os.environ['USER']}:{os.environ['USER']}", cosmovisor_binary_path], check=True)
+            subprocess.run(["sudo", "chmod", "+x", cosmovisor_binary_path], check=True)
         else:
-            subprocess.run(["mv", temp_binary_path, binary_path], check=True)
+            subprocess.run(["mv", temp_binary_path, cosmovisor_binary_path], check=True)
 
         # Test binary 
-        subprocess.run(["cosmovisor", "help"], check=True)
+        subprocess.run([cosmovisor_binary_path, "help"], check=True)
 
         print("Binary downloaded successfully.")
 
@@ -1057,7 +1060,7 @@ Do you want to install cosmovisor?
     }
 
     try:
-        subprocess.run(["/usr/local/bin/cosmovisor", "init", "/usr/local/bin/mchaind"], check=True, env=env)
+        subprocess.run([cosmovisor_binary_path, "init", daemon_binary_path], check=True, env=env)
     except subprocess.CalledProcessError:
         print("Failed to initialize cosmovisor.")
         sys.exit(1)
@@ -1070,6 +1073,7 @@ def setup_cosmovisor_service(mchain_home):
     """
     Setup cosmovisor service on Linux.
     """
+    cosmovisor_binary_path = os.path.join(args.binary_path, "cosmovisor")
 
     operating_system = platform.system()
 
@@ -1112,7 +1116,7 @@ Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
 Environment="DAEMON_LOG_BUFFER_SIZE=512"
 Environment="UNSAFE_SKIP_BACKUP=true"
 User={user}
-ExecStart=/usr/local/bin/cosmovisor start --home {mchain_home}
+ExecStart={cosmovisor_binary_path} start --home {mchain_home}
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
@@ -1139,6 +1143,8 @@ def setup_mchaind_service(mchain_home):
     """
     Setup mchaind service on Linux.
     """
+  
+    daemon_binary_path = os.path.join(args.binary_path, "mchaind")
 
     operating_system = platform.system()
 
@@ -1175,7 +1181,7 @@ After=network-online.target
 
 [Service]
 User={user}
-ExecStart=/usr/local/bin/mchaind start --home {mchain_home}
+ExecStart={daemon_binary_path} start --home {mchain_home}
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
