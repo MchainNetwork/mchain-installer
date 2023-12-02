@@ -858,14 +858,15 @@ Do you want me to install it?
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
 
-        req = urlrq.Request(snapshot_url, headers={'User-Agent': 'Mozilla/5.0'})
-        resp = urlrq.urlopen(req, context=context)
-        latest_snapshot_url = resp.read().decode()
+        #req = urlrq.Request(snapshot_url, headers={'User-Agent': 'Mozilla/5.0'})
+        #resp = urlrq.urlopen(req, context=context)
+        #latest_snapshot_url = resp.read().decode()
 
         snapshot_info.append({
             "network": chain_id,
             "mirror": "Germany",
-            "url": latest_snapshot_url.rstrip('\n'),
+            #"url": latest_snapshot_url.rstrip('\n'),
+            "url": snapshot_url,
             "type": "pruned",
             "provider": "mchain"
         })
