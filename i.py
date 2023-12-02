@@ -366,7 +366,7 @@ def select_mchain_home():
     if args.home:
         mchain_home = args.home
     else:
-        default_home = os.path.expanduser("~/.mchaind")
+        default_home = os.path.expanduser(DEFAULT_MCHAIN_HOME)
         print(bcolors.OKGREEN + f"""
 Do you want to install Mchain in the default location?:
 
