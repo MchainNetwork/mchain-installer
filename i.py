@@ -217,15 +217,20 @@ If you have an old Mchain installation,
 
 
 def client_complete_message(mchain_home):
+    daemon_binary_path = os.path.join(args.binary_path, "mchaind")
+
     print(bcolors.OKGREEN + """
 ✨ Congratulations! You have successfully completed setting up an Mchain client! ✨
 """ + bcolors.ENDC)
 
-    print("🧪 Try running: " + bcolors.OKGREEN + f"mchaind status --home {mchain_home}" + bcolors.ENDC)
+    print("🧪 Try running: " + bcolors.OKGREEN + f"{daemon_binary_path} status --home {mchain_home}" + bcolors.ENDC)
     print()
 
 
 def node_complete_message(using_cosmovisor, using_service, mchain_home):
+    daemon_binary_path = os.path.join(args.binary_path, "mchaind")
+    cosmovisor_binary_path = os.path.join(args.binary_path, "cosmovisor")
+
     print(bcolors.OKGREEN + """
 ✨ Congratulations! You have successfully completed setting up an Mchain node! ✨
 """ + bcolors.ENDC)
@@ -234,18 +239,18 @@ def node_complete_message(using_cosmovisor, using_service, mchain_home):
 
         if using_cosmovisor:
             print("🧪 To start the cosmovisor service run: ")
-            print(bcolors.OKGREEN + f"sudo systemctl start cosmovisor" + bcolors.ENDC)
+            print(bcolors.OKGREEN + f"sudo systemctl start {cosmovisor_binary_path}" + bcolors.ENDC)
         else:
             print("🧪 To start the mchaind service run: ")
-            print(bcolors.OKGREEN + f"sudo systemctl start mchaind" + bcolors.ENDC)
+            print(bcolors.OKGREEN + f"sudo systemctl start {daemon_binary_path}" + bcolors.ENDC)
 
     else:
         if using_cosmovisor:
             print("🧪 To start cosmovisor run: ")
-            print(bcolors.OKGREEN + f"DAEMON_NAME=mchaind DAEMON_HOME={mchain_home} cosmovisor run start" + bcolors.ENDC)
+            print(bcolors.OKGREEN + f"DAEMON_NAME={daemon_binary_path} DAEMON_HOME={mchain_home} {cosmovisor_binary_path} run start" + bcolors.ENDC)
         else:
             print("🧪 To start mchaind run: ")
-            print(bcolors.OKGREEN + f"mchaind start --home {mchain_home}" + bcolors.ENDC)
+            print(bcolors.OKGREEN + f"{daemon_binary_path} start --home {mchain_home}" + bcolors.ENDC)
 
 
     
