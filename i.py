@@ -145,7 +145,7 @@ TESTNET = Network(
     peers = [
       "422a7573d2e727a51cdca65dc0bd909e62f0b05f@64.227.74.95:26656",
     ],
-    rpc_node = "https://testnet.rpc.mchain.network",
+    rpc_node = "https://testnet.rpc.mchain.network:26657",
     addrbook_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/addrbook.json",
     snapshot_url = "https://mchain.fra1.cdn.digitaloceanspaces.com/mchain-testnet-1/mchain-testnet-1.tar.lz4"
 )
