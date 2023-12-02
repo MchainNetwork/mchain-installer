@@ -366,7 +366,7 @@ def select_mchain_home():
     if args.home:
         mchain_home = args.home
     else:
-        default_home = os.path.expanduser(DEFAULT_MCHAIN_HOME)
+        default_home = DEFAULT_MCHAIN_HOME
         print(bcolors.OKGREEN + f"""
 Do you want to install Mchain in the default location?:
 
@@ -1224,6 +1224,7 @@ def main():
         mchain_home = select_mchain_home()
         moniker = select_moniker()
         initialize_mchain_home(mchain_home, moniker)
+        customize_config(mchain_home, network)
         using_cosmovisor = download_cosmovisor(mchain_home)
         download_genesis(network, mchain_home)
         download_addrbook(network, mchain_home)
