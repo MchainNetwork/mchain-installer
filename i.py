@@ -147,7 +147,7 @@ TESTNET = Network(
     ],
     rpc_node = "https://testnet.rpc.mchain.network",
     addrbook_url = "https://mchain.fra1.digitaloceanspaces.com/mchain-testnet-1/addrbook.json",
-    snapshot_url = "https://mchain.fra1.cdn.digitaloceanspaces.com/snapshots/mchain-testnet-1.tar"
+    snapshot_url = "https://mchain.fra1.cdn.digitaloceanspaces.com/mchain-testnet-1/mchain-testnet-1.tar.lz4"
 )
 
 MAINNET = Network(
@@ -889,7 +889,7 @@ Do you want me to install it?
         #            "provider": "chainlayer"
         #        })
         #
-        #except (urlrq.URLError, json.JSONDecodeError) as e:
+        # except (urlrq.URLError, json.JSONDecodeError) as e:
         #    print(f"Error: Failed to fetch or parse snapshot JSON - {e}")
 
         return snapshot_info
