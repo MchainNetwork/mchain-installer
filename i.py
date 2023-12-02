@@ -493,7 +493,7 @@ Do you want to initialize the Mchain home directory at '{mchain_home}'?
     
     print(f"Initializing Mchain home directory at '{mchain_home}'...")
     try:
-        daemon_binary_path = os.path.join(mchain_home, "mchaind")
+        daemon_binary_path = os.path.join(args.binary_path, "mchaind")
 
         subprocess.run(
             ["rm", "-rf", mchain_home], 
