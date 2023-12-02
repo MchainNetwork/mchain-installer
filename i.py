@@ -223,7 +223,7 @@ def client_complete_message(mchain_home):
 ✨ Congratulations! You have successfully completed setting up an Mchain client! ✨
 """ + bcolors.ENDC)
 
-    print("🧪 Try running: " + bcolors.OKGREEN + f"{daemon_binary_path} status --home {mchain_home}" + bcolors.ENDC)
+    print("🌬️ Try running: " + bcolors.OKGREEN + f"{daemon_binary_path} status --home {mchain_home}" + bcolors.ENDC)
     print()
 
 
@@ -238,18 +238,18 @@ def node_complete_message(using_cosmovisor, using_service, mchain_home):
     if using_service:
 
         if using_cosmovisor:
-            print("🧪 To start the cosmovisor service run: ")
+            print("🌬️ To start the cosmovisor service run: ")
             print(bcolors.OKGREEN + f"sudo systemctl start {cosmovisor_binary_path}" + bcolors.ENDC)
         else:
-            print("🧪 To start the mchaind service run: ")
+            print("🌬️ To start the mchaind service run: ")
             print(bcolors.OKGREEN + f"sudo systemctl start {daemon_binary_path}" + bcolors.ENDC)
 
     else:
         if using_cosmovisor:
-            print("🧪 To start cosmovisor run: ")
+            print("🌬️ To start cosmovisor run: ")
             print(bcolors.OKGREEN + f"DAEMON_NAME={daemon_binary_path} DAEMON_HOME={mchain_home} {cosmovisor_binary_path} run start" + bcolors.ENDC)
         else:
-            print("🧪 To start mchaind run: ")
+            print("🌬️ To start mchaind run: ")
             print(bcolors.OKGREEN + f"{daemon_binary_path} start --home {mchain_home}" + bcolors.ENDC)
 
 

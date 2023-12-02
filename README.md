@@ -1,4 +1,4 @@
-# Mchain Installer 🧪 ⚙️
+# Mchain Installer 🌬️ ⚙️
 
 <p align="center">
   <img src="assets/screenshot.png" alt="Screenshot" width="700">
