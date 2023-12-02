@@ -953,7 +953,7 @@ Choose one of the following snapshots:
         print(f"\n🔽 Downloading snapshots from {snapshot_url}")
         download_process = subprocess.Popen(["wget", "-q", "-O", "-", snapshot_url], stdout=subprocess.PIPE)
         lz4_process = subprocess.Popen(["lz4", "-d"], stdin=download_process.stdout, stdout=subprocess.PIPE)
-        tar_process = subprocess.Popen(["tar", "-C", mchain_home, "-xf", "-"], stdin=lz4_process.stdout, stdout=subprocess.PIPE)
+        tar_process = subprocess.Popen(["tar", "-C", mchain_home+"/data", "-xf", "-"], stdin=lz4_process.stdout, stdout=subprocess.PIPE)
 
         tar_process.wait()
         print("Snapshot download and extraction completed successfully.")
