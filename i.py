@@ -11,7 +11,7 @@ import json
 import tempfile
 from enum import Enum
 
-DEFAULT_MCHAIN_HOME = os.path.expanduser("~/.mchaind")
+DEFAULT_MCHAIN_HOME = os.path.expanduser("~/.mchain")
 DEFAULT_MONIKER = "mchain"
 
 NETWORK_CHOICES = ['mchain-1', 'mchain-testnet-1']
@@ -590,7 +590,7 @@ def customize_config(home, network):
 
     """
 
-    # osmo-test-5 configuration
+    # mchain-testnet-1 configuration
     if network == NetworkChoice.TESTNET:
 
         # patch client.toml
@@ -869,28 +869,28 @@ Do you want me to install it?
         })
 
         # Parse quicksync snapshot json
-        try:
-            url = "https://dl2.quicksync.io/json/mchain.json"
-            resp = urlrq.urlopen(url, context=context)
-            data = resp.read().decode()
-
-            snapshots = json.loads(data)
-
-            for snapshot in snapshots:
-                
-                if not snapshot["file"].startswith(quicksync_prefix):
-                    continue
-
-                snapshot_info.append({
-                    "network": chain_id,
-                    "mirror": snapshot["mirror"],
-                    "url": snapshot["url"],
-                    "type": snapshot["network"],
-                    "provider": "chainlayer"
-                })
-
-        except (urlrq.URLError, json.JSONDecodeError) as e:
-            print(f"Error: Failed to fetch or parse snapshot JSON - {e}")
+        # try:
+        #    url = "https://dl2.quicksync.io/json/mchain.json"
+        #    resp = urlrq.urlopen(url, context=context)
+        #    data = resp.read().decode()
+        #
+        #    snapshots = json.loads(data)
+        #
+        #    for snapshot in snapshots:
+        #        
+        #        if not snapshot["file"].startswith(quicksync_prefix):
+        #            continue
+        #
+        #        snapshot_info.append({
+        #            "network": chain_id,
+        #            "mirror": snapshot["mirror"],
+        #            "url": snapshot["url"],
+        #            "type": snapshot["network"],
+        #            "provider": "chainlayer"
+        #        })
+        #
+        #except (urlrq.URLError, json.JSONDecodeError) as e:
+        #    print(f"Error: Failed to fetch or parse snapshot JSON - {e}")
 
         return snapshot_info
 
