@@ -561,19 +561,20 @@ Please choose your desired pruning settings:
             print(f"Chosen setting: {PRUNING_CHOICES[int(choice) - 1]}")
     
     app_toml = os.path.join(mchain_home, "config", "app.toml")
+    sed_option = "''" if platform.system() == 'Darwin' else ''
 
     if choice == PruningChoice.DEFAULT:
         # Nothing to do
         pass
 
     elif choice == PruningChoice.NOTHING:
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/pruning = \"default\"/pruning = \"nothing\"/g' {app_toml}", shell=True)
+        subprocess.run(f"sed -i {sed_option} -E 's/pruning = \"default\"/pruning = \"nothing\"/g' {app_toml}", shell=True)
 
     elif choice == PruningChoice.EVERYTHING:
         primeNum = random.choice([x for x in range(11, 97) if not [t for t in range(2, x) if not x % t]])
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/pruning = \"default\"/pruning = \"custom\"/g' {app_toml}", shell=True)
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/pruning-keep-recent = \"0\"/pruning-keep-recent = \"10000\"/g' {app_toml}", shell=True)
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/pruning-interval = \"0\"/pruning-interval = \"{primeNum}\"/g' {app_toml}", shell=True)
+        subprocess.run(f"sed -i {sed_option} -E 's/pruning = \"default\"/pruning = \"custom\"/g' {app_toml}", shell=True)
+        subprocess.run(f"sed -i {sed_option} -E 's/pruning-keep-recent = \"0\"/pruning-keep-recent = \"10000\"/g' {app_toml}", shell=True)
+        subprocess.run(f"sed -i {sed_option} -E 's/pruning-interval = \"0\"/pruning-interval = \"{primeNum}\"/g' {app_toml}", shell=True)
 
     else:
         print(bcolors.RED + f"Invalid pruning setting {choice}. Please choose a valid setting.\n" + bcolors.ENDC)
@@ -596,7 +597,9 @@ def customize_config(home, network):
     if network == NetworkChoice.TESTNET:
 
         app_toml = os.path.join(home, "config", "app.toml")
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/minimum-gas-prices = \"0stake\"/minimum-gas-prices = \"0umark\"/g' {app_toml}", shell=True)
+        sed_option = "''" if platform.system() == 'Darwin' else ''
+
+        subprocess.run(f"sed -i {sed_option} -E 's/minimum-gas-prices = \"0stake\"/minimum-gas-prices = \"0umark\"/g' {app_toml}", shell=True)
 
         # patch client.toml
         client_toml = os.path.join(home, "config", "client.toml")
@@ -617,7 +620,7 @@ def customize_config(home, network):
         config_toml = os.path.join(home, "config", "config.toml")
         
         peers = ','.join(TESTNET.peers)
-        subprocess.run(f"sed -i $(uname -s | grep -q Darwin && echo \"''\") -E 's/persistent_peers = \"\"/persistent_peers = \"{peers}\"/g' {config_toml}", shell=True)
+        subprocess.run(f"sed -i {sed_option} -E 's/persistent_peers = \"\"/persistent_peers = \"{peers}\"/g' {config_toml}", shell=True)
     
     # mchain-1 configuration
     elif network == NetworkChoice.MAINNET:
