@@ -691,7 +691,7 @@ def download_binary(network):
             subprocess.run(["mv", "/tmp/mchaind", binary_path], check=True)
 
         # Test binary 
-        subprocess.run(["mchaind", "version"], check=True)
+        subprocess.run([binary_path, "version"], check=True)
 
         print("Binary downloaded successfully.")
 
